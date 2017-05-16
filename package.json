@@ -1,0 +1,19 @@
+{
+  "name": "slack-status-based-on-wifi-name",
+  "version": "0.0.1",
+  "description": "Set your status on Slack based on the WiFi network you are connected to.",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LukaszWiktor/slack-status-based-on-wifi-name.git"
+  },
+  "author": "Lukasz Wiktor",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/LukaszWiktor/slack-status-based-on-wifi-name/issues"
+  },
+  "homepage": "https://github.com/LukaszWiktor/slack-status-based-on-wifi-name#readme",
+  "dependencies": {
+    "axios": "0.16.1"
+  }
+}
