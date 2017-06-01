@@ -54,8 +54,11 @@ switch (platform) {
   case 'darwin':
     getWiFiName = getMacWiFiName;
     break;
-  default:
+  case 'win32':
     getWiFiName = getWinWiFiName;
+  default:
+    console.error('Currently only Mac OS X and Windows are supported');
+    process.exit(2);
 }
 
 setInterval(function() {
