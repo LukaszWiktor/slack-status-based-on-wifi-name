@@ -58,6 +58,7 @@ switch (platform) {
     break;
   case 'win32':
     getWiFiName = getWinWiFiName;
+    break;
   default:
     console.error('Currently only Mac OS X and Windows are supported');
     process.exit(2);
