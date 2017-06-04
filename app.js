@@ -12,6 +12,14 @@ if (!config.slackToken) {
     process.exit(1);
 }
 
+function getLinuxWiFiName() {
+    return execSync("iwgetid -r") // Linux only
+            .toString()
+            .split("\n")
+            .filter(line => line.match(/.+/))
+            .find(ssid => true); // find first
+}
+
 function getMacWiFiName() {
     return execSync("/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I") // macos only
             .toString()
@@ -59,8 +67,11 @@ switch (platform) {
   case 'win32':
     getWiFiName = getWinWiFiName;
     break;
+  case 'linux':
+    getWiFiName = getLinuxWiFiName;
+    break;
   default:
-    console.error('Currently only Mac OS X and Windows are supported');
+    console.error('Unknown platform %s', platform);
     process.exit(2);
 }
 
