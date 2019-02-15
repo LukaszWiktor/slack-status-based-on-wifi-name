@@ -10,5 +10,11 @@ module.exports = {
             "status_emoji": ":office:"
         }
     },
+    statusByIpAddress: {
+        "10.0.0.1": { // office - clear status
+            "status_text": "",
+            "status_emoji": ""
+        }
+    },
     updateInterval: 1000 // every second
 }
