@@ -20,6 +20,11 @@ function getLinuxWiFiName() {
             .find(ssid => true); // find first
 }
 
+function getLinuxIpAddress() {
+  return '';
+  // TODO: linux ip address support
+}
+
 function getMacWiFiName() {
     return execSync("/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I") // macos only
             .toString()
@@ -27,6 +32,11 @@ function getMacWiFiName() {
             .filter(line => line.includes(" SSID: "))
             .map(line => line.match(/: (.*)/)[1])
             .find(ssid => true); // find first
+}
+
+function getMacIpAddress() {
+  return '';
+  // TODO: Mac ip address support
 }
 
 function getWinWiFiName() {
@@ -74,6 +84,7 @@ let getWiFiName;
 switch (platform) {
   case 'darwin':
     getWiFiName = getMacWiFiName;
+    getIpAddress = getMacIpAddress;
     break;
   case 'win32':
     getWiFiName = getWinWiFiName;
@@ -81,6 +92,7 @@ switch (platform) {
     break;
   case 'linux':
     getWiFiName = getLinuxWiFiName;
+    getIpAddress = getLinuxIpAddress;
     break;
   default:
     console.error('Unknown platform %s', platform);
