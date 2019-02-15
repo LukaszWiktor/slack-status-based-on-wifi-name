@@ -38,6 +38,15 @@ function getWinWiFiName() {
             .find(ssid => true); // find first
 }
 
+function getWinIpAddress() {
+    return execSync("ipconfig") // Windows only
+            .toString()
+            .split("\n")
+            .filter(line => line.includes("IPv4 Address"))
+            .map(line => line.match(/: (.*)/)[1])
+            .find(ssid => true); // find first
+}
+
 function setSlackStatus(token, status) {
     return axios.post("https://slack.com/api/users.profile.set",
         querystring.stringify({
@@ -57,6 +66,8 @@ function setSlackStatus(token, status) {
 
 const platform = os.platform();
 
+let ipAddress;
+let getIpAddress;
 let wiFiName;
 let getWiFiName;
 // Get appropriate function for platform
@@ -66,6 +77,7 @@ switch (platform) {
     break;
   case 'win32':
     getWiFiName = getWinWiFiName;
+    getIpAddress = getWinIpAddress;
     break;
   case 'linux':
     getWiFiName = getLinuxWiFiName;
@@ -76,17 +88,24 @@ switch (platform) {
 }
 
 setInterval(function() {
+    const newIpAddress = getIpAddress();
     const newWiFiName = getWiFiName();
-    if (newWiFiName === wiFiName) {
+    if (newWiFiName === wiFiName && newIpAddress === ipAddress) {
         return;
     }
+    ipAddress = newIpAddress;
     wiFiName = newWiFiName;
     console.log("Connected WiFi SSID: %s", wiFiName);
+    console.log("Connected IP: %s", ipAddress);
 
-    const status = config.statusByWiFiName[wiFiName];
+    var status = config.statusByWiFiName[wiFiName];
     if (!status) {
         console.log("Status not specified for WiFi: %s", wiFiName);
-        return;
+        status = config.statusByIpAddress[ipAddress];
+        if (!status) {
+          console.log("Status not specified for IP: %s", ipAddress);
+          return;
+      }
     }
     console.log("Setting Slack status to: %j", status);
     setSlackStatus(config.slackToken, status);
